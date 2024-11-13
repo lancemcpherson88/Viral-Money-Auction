@@ -9,8 +9,8 @@
 <body>
     <h1>ViralBitcoinAuction</h1>
     <h2>Viral Bitcoin Auction</h2>
-   <h1>Viral Bitcoin Auction</h1>
-    <h2>Highest Bid: <span id="highest-bid">Loading...</span> BTC</h2>
+      <h3>Auction Countdown</h3>
+    <p>Time remaining: <span id="countdown-timer">Loading...</span></p>
 
     <form id="bid-form">
         <input type="text" name="user" placeholder="Your Name" required>
@@ -19,8 +19,32 @@
     </form>
 
     <script>
-        // Fetch the highest bid initially
-        fetchHighestBid();
+        // Set the countdown time in seconds (e.g., 5 minutes = 300 seconds)
+        let countdownTime = 300; // Adjust this for the starting countdown time
+
+        // Function to update the countdown timer
+        function updateCountdown() {
+            let minutes = Math.floor(countdownTime / 60);
+            let seconds = countdownTime % 60;
+
+            // Format the timer to have two digits
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            document.getElementById("countdown-timer").innerText = `${minutes}:${seconds}`;
+
+            // Decrement the countdown time
+            countdownTime--;
+
+            // If the countdown reaches zero, stop the timer and display a message
+            if (countdownTime < 0) {
+                clearInterval(timerInterval);
+                document.getElementById("countdown-timer").innerText = "Auction Ended!";
+            }
+        }
+
+        // Start the countdown timer
+        const timerInterval = setInterval(updateCountdown, 1000);
 
         // Handle form submission
         document.getElementById('bid-form').onsubmit = async function(event) {
@@ -35,18 +59,11 @@
             });
 
             if (response.ok) {
-                fetchHighestBid(); // Update the highest bid after submitting
+                // Reset the countdown time whenever a new bid is placed
+                countdownTime = 300; // Adjust this value to the reset time per bid
             }
         };
-
-        // Fetch and display the highest bid
-        async function fetchHighestBid() {
-            const response = await fetch('/bid', { method: 'GET' });
-            const result = await response.json();
-            document.getElementById('highest-bid').innerText = result.highest_bid.amount + ' BTC by ' + result.highest_bid.user;
-        }
-    </script>    
-    
+    </script>
     
     <p>The last bidder with time left wins the constantly growing Auction Pot, even if it grows to $100 million!</p>
 
