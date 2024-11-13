@@ -1,61 +1,51 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-import sqlite3
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+import json
+import os
 import time
 
-app = Flask(__name__)
+# Simple in-memory auction data for demonstration
+bids = []
 
-# Initialize the database
-def init_db():
-    conn = sqlite3.connect('auction.db')
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS bids (
-            id INTEGER PRIMARY KEY,
-            user TEXT,
-            amount REAL,
-            timestamp INTEGER
-        )
-    ''')
-    conn.commit()
-    conn.close()
+class AuctionHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            # Serve the main auction HTML page
+            self.path = '/templates/auction.html'
+        elif self.path.startswith('/static/'):
+            # Serve static files (e.g., CSS)
+            self.path = self.path
+        else:
+            # Fallback to a 404 page
+            self.send_error(404, "File not found")
+            return
 
-# Initialize the database when starting the server
-init_db()
+        # Serve the requested file
+        return SimpleHTTPRequestHandler.do_GET(self)
 
-@app.route('/')
-def auction():
-    # Fetch the highest bid
-    conn = sqlite3.connect('auction.db')
-    c = conn.cursor()
-    c.execute('SELECT user, amount FROM bids ORDER BY amount DESC LIMIT 1')
-    highest_bid = c.fetchone()
-    conn.close()
+    def do_POST(self):
+        if self.path == '/bid':
+            # Handle bid submissions
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            bid = json.loads(post_data)
 
-    return render_template('auction.html', highest_bid=highest_bid)
+            # Record the bid
+            bids.append({"user": bid["user"], "amount": float(bid["amount"]), "timestamp": int(time.time())})
 
-@app.route('/bid', methods=['POST'])
-def place_bid():
-    user = request.form['user']
-    amount = float(request.form['amount'])
-
-    # Insert new bid
-    conn = sqlite3.connect('auction.db')
-    c = conn.cursor()
-    c.execute('INSERT INTO bids (user, amount, timestamp) VALUES (?, ?, ?)', 
-              (user, amount, int(time.time())))
-    conn.commit()
-    conn.close()
-
-    return redirect(url_for('auction'))
-
-@app.route('/api/bids', methods=['GET'])
-def get_bids():
-    conn = sqlite3.connect('auction.db')
-    c = conn.cursor()
-    c.execute('SELECT user, amount FROM bids ORDER BY amount DESC')
-    bids = c.fetchall()
-    conn.close()
-    return jsonify(bids)
+            # Respond with the highest bid in JSON format
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            highest_bid = max(bids, key=lambda x: x['amount'])
+            self.wfile.write(json.dumps({"status": "success", "highest_bid": highest_bid}).encode())
+        else:
+            self.send_error(404, "Invalid endpoint")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    # Set the current working directory to serve files
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+    # Start the server
+    server = HTTPServer(('0.0.0.0', 8080), AuctionHandler)
+    print("Starting Viral Bitcoin Auction server on port 8080...")
+    server.serve_forever()
