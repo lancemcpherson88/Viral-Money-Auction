@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Bitcoin Auction</title>
+</head>
+<body>
+    <h1>Viral Bitcoin Auction</h1>
+    <h2>Highest Bid: {{ highest_bid[1] if highest_bid else "No bids yet" }} BTC by {{ highest_bid[0] if highest_bid else "N/A" }}</h2>
+
+    <form action="{{ url_for('place_bid') }}" method="POST">
+        <input type="text" name="user" placeholder="Your Name" required>
+        <input type="number" name="amount" placeholder="Bid Amount in BTC" step="0.0001" required>
+        <button type="submit">Place Bid</button>
+    </form>
+</body>
+</html>
