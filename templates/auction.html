@@ -4,15 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viral Bitcoin Auction</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
 <body>
     <h1>Viral Bitcoin Auction</h1>
-    <h2>Highest Bid: {{ highest_bid[1] if highest_bid else "No bids yet" }} BTC by {{ highest_bid[0] if highest_bid else "N/A" }}</h2>
+    <h2>Highest Bid: <span id="highest-bid">Loading...</span> BTC</h2>
 
-    <form action="{{ url_for('place_bid') }}" method="POST">
+    <form id="bid-form">
         <input type="text" name="user" placeholder="Your Name" required>
         <input type="number" name="amount" placeholder="Bid Amount in BTC" step="0.0001" required>
         <button type="submit">Place Bid</button>
     </form>
+
+    <script>
+        // Fetch the highest bid initially
+        fetchHighestBid();
+
+        // Handle form submission
+        document.getElementById('bid-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const user = this.user.value;
+            const amount = this.amount.value;
+
+            const response = await fetch('/bid', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, amount })
+            });
+
+            if (response.ok) {
+                fetchHighestBid(); // Update the highest bid after submitting
+            }
+        };
+
+        // Fetch and display the highest bid
+        async function fetchHighestBid() {
+            const response = await fetch('/bid', { method: 'GET' });
+            const result = await response.json();
+            document.getElementById('highest-bid').innerText = result.highest_bid.amount + ' BTC by ' + result.highest_bid.user;
+        }
+    </script>
 </body>
 </html>
