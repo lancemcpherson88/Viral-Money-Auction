@@ -4,45 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viral Bitcoin Auction</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Viral Bitcoin Auction</h1>
-    <h2>Highest Bid: <span id="highest-bid">Loading...</span> BTC</h2>
+    <h1>ViralBitcoinAuction</h1>
+    <h2>Viral Bitcoin Auction</h2>
+    <p>The last bidder with time left wins the constantly growing Auction Pot, even if it grows to $100 million!</p>
 
-    <form id="bid-form">
-        <input type="text" name="user" placeholder="Your Name" required>
-        <input type="number" name="amount" placeholder="Bid Amount in BTC" step="0.0001" required>
-        <button type="submit">Place Bid</button>
-    </form>
+    <h3>The Auction Pot</h3>
+    <p>The Auction Pot grows every time a new person joins!</p>
 
-    <script>
-        // Fetch the highest bid initially
-        fetchHighestBid();
+    <p>The last bidder with time left on their countdown wins the right to buy the Auction Pot for $1, even if it grows to $100 million!</p>
 
-        // Handle form submission
-        document.getElementById('bid-form').onsubmit = async function(event) {
-            event.preventDefault();
-            const user = this.user.value;
-            const amount = this.amount.value;
+    <p>There is no luck or chance involved with The Viral Bitcoin Auction.</p>
 
-            const response = await fetch('/bid', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user, amount })
-            });
+    <p>With The Viral Bitcoin Auction, all bidders are fully in control of their destiny.</p>
 
-            if (response.ok) {
-                fetchHighestBid(); // Update the highest bid after submitting
-            }
-        };
+    <p>Winning is simply a matter of resetting your countdown before it reaches 00:00:00 longer than everyone else!</p>
 
-        // Fetch and display the highest bid
-        async function fetchHighestBid() {
-            const response = await fetch('/bid', { method: 'GET' });
-            const result = await response.json();
-            document.getElementById('highest-bid').innerText = result.highest_bid.amount + ' BTC by ' + result.highest_bid.user;
-        }
-    </script>
+    <p>It is a battle of the strongest will!</p>
+
+    <h3>How to Gain More Time</h3>
+    <ul>
+        <li>You can buy Time Bids to add time to your countdown.</li>
+        <li>You can invite a friend to get Time Bids for your countdown (Legal Disclaimer: This is a promotional reward, not a part of the auction's structure).</li>
+        <li>You can post about The Viral Bitcoin Auction on social media to get more Time Bids for your countdown!</li>
+        <li>You can verify the posts of others to get Time Bids for your countdown.</li>
+    </ul>
+    <p>Each Time Bid adds 30 seconds to your countdown.</p>
+
+    <h3>The Winning Conditions</h3>
+    <p>The last person with time left on their countdown wins the Auction Pot for $1, even if it grows to $100 million!</p>
+
+    <p>When the Auction Pot reaches $1,000,000, there will be a "Buy It Now" option for users to buy the Auction at a 15% discount!</p>
+
+    <p>Due to the nature of this auction, we only accept BTC for bids to avoid charge-backs.</p>
+
+    <h3>Transparency</h3>
+    <p>We believe trust is good, but verification is better. That’s why the Auction Pot is publicly located at this Bitcoin address so everyone and their cat can monitor it!</p>
+
+    <h3>Reasons Not to Miss Out</h3>
+    <p>The price of bids will increase as the pot grows; these are the cheapest bids you can get.</p>
+
+    <p>The Auction Pot isn’t the only prize we are giving out. We want to take care of everyone who takes care of us.</p>
+
+    <h4>Additional Rewards</h4>
+    <p>In a promotion separate from the Auction, top bidders, top inviters, top social media posters, and oldest accounts are rewarded handsomely as the Auction Pot grows!</p>
+
+    <p><em>Legal Disclaimer: All rewards are promotional company-funded rewards and do not affect the outcome of the auction. Rewards do not come from the Auction Pot.</em></p>
+
+    <h4>Reward Tiers</h4>
+
+    <h5>If the Auction Pot grows to $10,000:</h5>
+    <ul>
+        <li>Top Bidder: $1,000</li>
+        <li>Top Inviter: $1,000</li>
+        <li>Top Poster: $1,000</li>
+        <li>Top Post Checker: $1,000</li>
+        <li>Oldest Active Bidder: $1,000</li>
+        <li>First Bidder: $1,000</li>
+        <li>Oldest Inviter: $1,000</li>
+    </ul>
+
+    <h5>If the Auction Pot grows to $100,000:</h5>
+    <ul>
+        <li>Top Bidder: $10,000</li>
+        <li>Top 10 Bidders: $1,000 each</li>
+        <li>Top Inviter: $10,000</li>
+        <li>Top 10 Inviters: $1,000 each</li>
+        <li>Top Poster: $10,000</li>
+        <li>Top 10 Posters: $1,000 each</li>
+        <li>Top Post Checker: $10,000</li>
+        <li>Top 10 Post Checkers: $1,000 each</li>
+    </ul>
+
+    <h5>If the Auction Pot grows to $1 Million:</h5>
+    <ul>
+        <li>Top Pot Bidder: $100,000</li>
+        <li>Top 10 Pot Bidders: $10,000 each</li>
+        <li>Top 100 Pot Bidders: $1,000 each</li>
+        <li>Top Inviter: $100,000</li>
+        <li>Top 10 Inviters: $10,000 each</li>
+        <li>Top 100 Inviters: $1,000 each</li>
+        <li>Top Poster: $100,000</li>
+        <li>Top 10 Posters: $10,000 each</li>
+        <li>Top 100 Posters: $1,000 each</li>
+        <li>Top Post Checker: $100,000</li>
+        <li>Top 10 Post Checkers: $10,000 each</li>
+        <li>Top 100 Post Checkers: $1,000 each</li>
+    </ul>
+
+    <h5>If the Auction Pot grows to $10 Million:</h5>
+    <ul>
+        <li>Top Pot Bidder: $1 million</li>
+        <li>Top 10 Pot Bidders: $100,000 each</li>
+        <li>Top 100 Pot Bidders: $10,000 each</li>
+        <li>Top 1,000 Pot Bidders: $1,000 each</li>
+        <li>Top Inviter: $1 million</li>
+        <li>Top 10 Inviters: $100,000 each</li>
+        <li>Top 100 Inviters: $10,000 each</li>
+        <li>Top 1,000 Inviters: $1,000 each</li>
+        <li>Top Poster: $1 million</li>
+        <li>Top 10 Posters: $100,000 each</li>
+        <li>Top 100 Posters: $10,000 each</li>
+        <li>Top 1,000 Posters: $1,000 each</li>
+    </ul>
+
+    <h5>If the Auction Pot grows to $100 Million:</h5>
+    <ul>
+        <li>Top Bidder: $10 million</li>
+        <li>Top 10 Bidders: $1 million each</li>
+        <li>Top 100 Bidders: $100,000 each</li>
+        <li>Top 1,000 Bidders: $10,000 each</li>
+        <li>Top 10,000 Bidders: $1,000 each</li>
+        <li>Top Inviter: $10 million</li>
+        <li>Top 10 Inviters: $1 million each</li>
+        <li>Top 100 Inviters: $100,000 each</li>
+        <li>Top 1,000 Inviters: $10,000 each</li>
+        <li>Top 10,000 Inviters: $1,000 each</li>
+        <li>Top Poster: $10 million</li>
+        <li>Top 10 Posters: $1 million each</li>
+        <li>Top 100 Posters: $100,000 each</li>
+        <li>Top 1,000 Posters: $10,000 each</li>
+    </ul>
 </body>
 </html>
